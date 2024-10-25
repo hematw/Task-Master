@@ -4,12 +4,7 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 import axiosIns from "@/axios";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import {
-  Button,
-  Input,
-  Select,
-  SelectItem,
-} from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import PassInput from "@/components/PassInput";
 
@@ -68,8 +63,11 @@ export function RegisterForm() {
     console.log(values);
     setDuplicateError("");
     try {
-      const { data } = await axiosIns.post("/auth/register", values);
-      localStorage.setItem("token", data.token);
+      const {
+        data: { token, user },
+      } = await axiosIns.post("/auth/register", values);
+      
+      localStorage.setItem("auth", JSON.stringify({ token, user }));
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -87,7 +85,7 @@ export function RegisterForm() {
   if (serverError) {
     console.log(serverError);
   }
-  console.log(duplicateError)
+  console.log(duplicateError);
 
   return (
     <div className="h-screen flex items-center">

@@ -1,4 +1,6 @@
 import AddForm from "@/components/AddForm";
+import User from "@/components/User";
+import ProjectProgress from "@/components/ProjectProgress";
 import useFetch from "@/hooks/useFetch";
 import {
   Button,
@@ -36,6 +38,10 @@ const columns = [
     label: "COMPLETED",
   },
   {
+    key: "progress",
+    label: "PROGRESS",
+  },
+  {
     key: "deadline",
     label: "DEADLINE",
   },
@@ -62,8 +68,19 @@ function Projects() {
       completedNum: project.tasks.filter((t) => t.status === "completed")
         .length,
     }));
-    console.log(Object.keys(projects));
+    console.log(projects);
   }
+
+  const renderCell = (project, columnKey) => {
+    switch (columnKey) {
+      case "manager":
+        return <User user={getKeyValue(project, columnKey)} />;
+      case "progress":
+        return <ProjectProgress project={project} />;
+      default:
+        return getKeyValue(project, columnKey);
+    }
+  };
 
   return (
     <div>
@@ -82,13 +99,13 @@ function Projects() {
             {(project) => (
               <TableRow key={project._id}>
                 {(columnKey) => (
-                  <TableCell>{getKeyValue(project, columnKey)}</TableCell>
+                  <TableCell>{renderCell(project, columnKey)}</TableCell>
                 )}
               </TableRow>
             )}
           </TableBody>
         </Table>
-        <Divider className="mt-8"/>
+        <Divider className="mt-8" />
         <div className="flex justify-between">
           <Button
             startContent={<Plus />}

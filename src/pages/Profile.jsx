@@ -11,7 +11,9 @@ function Profile() {
   const fileInputRef = useRef();
   const [imgPath, setImgPath] = useState("");
   const [selectedImg, setSelectedImg] = useState();
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const [user, setUser] = useState(useContext(UserContext));
+  const user = JSON.parse(localStorage.getItem("auth")).user;
+
   const {
     control,
     handleSubmit,
@@ -29,7 +31,6 @@ function Profile() {
       confirmNewPassword: "",
     },
   });
-
 
   // handle click on button to browse for files
   const handleClick = () => {
@@ -102,13 +103,6 @@ function Profile() {
                   />
                 )}
               />
-              {/* <input
-                hidden
-                type="file"
-                accept="image/* .jpg, .jpeg, .png"
-                ref={fileInputRef}
-                onChange={handleChange}
-              /> */}
             </div>
             <div className="grow">
               <Controller

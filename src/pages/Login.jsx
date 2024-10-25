@@ -47,10 +47,9 @@ export function LoginForm() {
   async function onSubmit(values) {
     console.log(values);
     try {
-      const { data } = await axiosIns.post("/auth/login", values);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      console.log(data);
+      const { data:{token, user} } = await axiosIns.post("/auth/login", values);
+      localStorage.setItem("auth", JSON.stringify({token, user}));
+      console.log(user);
       navigate("/");
     } catch (error) {
       console.log("Error", error);

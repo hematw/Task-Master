@@ -7,14 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function Header() {
-  const [error, setError] = useState("");
   const [user, setUser] = useState();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
       const { data } = await axiosIns.get("/auth/signout");
-      localStorage.removeItem("token");
+      localStorage.removeItem("auth");
       navigate("signin");
       console.log(data);
     } catch (error) {
@@ -24,7 +23,7 @@ export default function Header() {
   };
 
   useEffect(() => {
-    const loggedUser = JSON.parse(localStorage.getItem("user"));
+    const loggedUser = JSON.parse(localStorage.getItem("auth")).user;
     setUser(loggedUser);
   }, []);
 
