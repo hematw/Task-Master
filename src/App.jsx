@@ -9,6 +9,8 @@ import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import Profile from "./pages/Profile";
 import ProtectedPages from "./pages/ProtectedPages";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 // const Home = lazy(()=> import("./pages/Home"))
 // const ProtectedPages = lazy(()=> import("./pages/ProtectedPages"))
@@ -35,6 +37,8 @@ function App() {
           <Routes>
             <Route path="signin" element={<LoginForm />} />
             <Route path="signup" element={<RegisterForm />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
             <Route element={<ProtectedPages />}>
               <Route path="/" element={<Home />} />
               <Route path="projects" element={<Projects />} />

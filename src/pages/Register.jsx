@@ -206,7 +206,7 @@ export function RegisterForm() {
         </form>
         <p className="text-center mt-8">
           <span className="text-gray-400">Already a member? </span>
-          <Link to="/signin" className="font-semibold">
+          <Link to="/signin" className="font-semibold underline">
             Sign in
           </Link>
         </p>

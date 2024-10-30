@@ -9,7 +9,7 @@ function ProtectedPages() {
   // const [isLoading, setIsLoading] = useState(true);
   const auth = JSON.parse(localStorage.getItem("auth"));
 
-  if (!auth.token) {
+  if (!auth?.token) {
     return <Navigate to="signin" />;
   }
 

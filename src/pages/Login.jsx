@@ -47,8 +47,10 @@ export function LoginForm() {
   async function onSubmit(values) {
     console.log(values);
     try {
-      const { data:{token, user} } = await axiosIns.post("/auth/login", values);
-      localStorage.setItem("auth", JSON.stringify({token, user}));
+      const {
+        data: { token, user },
+      } = await axiosIns.post("/auth/login", values);
+      localStorage.setItem("auth", JSON.stringify({ token, user }));
       console.log(user);
       navigate("/");
     } catch (error) {
@@ -59,6 +61,7 @@ export function LoginForm() {
   return (
     <div className="h-screen flex items-center">
       <div className="m-auto w-96 ">
+        <h1 className="text-3xl font-semibold text-center">TaskMaster</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="email"
@@ -90,8 +93,31 @@ export function LoginForm() {
               />
             )}
           />
+          <div className="flex justify-between mt-6">
+            <label>
+              <input type="checkbox" className="mr-2" />
+              Remember me
+            </label>
+            <Link to="/forgot-password" className="underline">
+              Forgot password?
+            </Link>
+            {/* <Controller
+            name="rememberMe"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label="Remember me"
+                radius="sm"
+                variant=""
+                type="checkbox"
+                className="mt-6"
+                {...field}
+              />
+            )}
+          /> */}
+          </div>
           <Button
-            className="w-full mt-10 bg-black text-white"
+            className="w-full mt-6 bg-black text-white"
             size="lg"
             radius="sm"
             type="submit"
@@ -104,7 +130,7 @@ export function LoginForm() {
         </form>
         <p className="text-center mt-8">
           <span className="text-gray-400">Not a member? </span>
-          <Link to="/signup" className="font-semibold">
+          <Link to="/signup" className="font-semibold underline">
             Create an account
           </Link>
         </p>

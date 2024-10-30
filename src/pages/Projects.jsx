@@ -52,7 +52,7 @@ function Projects() {
     data: { projects },
   } = useFetch("/projects");
 
-  const { isOpen, onOpenChange, onOpen } = useDisclosure();
+  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
 
   if (projects) {
     projects = projects.map((project) => ({
@@ -85,7 +85,12 @@ function Projects() {
   return (
     <div>
       {isOpen && (
-        <AddForm isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} />
+        <AddForm
+          isOpen={isOpen}
+          onClose={onClose}
+          onOpen={onOpen}
+          onOpenChange={onOpenChange}
+        />
       )}
       <div className="max-w-7xl m-auto">
         <Table isStriped aria-label="Collection of created Projects">

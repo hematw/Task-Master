@@ -23,12 +23,13 @@ const projectSchema = Joi.object({
   deadline: Joi.date(),
 });
 
-function AddForm({ isOpen, onOpenChange, onOpen }) {
+function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
   const {
     data: { users },
-    loading,
+    isLoading,
   } = useFetch("/users");
-  console.log(users, loading);
+
+  console.log(users, isLoading);
   const {
     control,
     handleSubmit,
@@ -48,7 +49,7 @@ function AddForm({ isOpen, onOpenChange, onOpen }) {
     try {
       const { data } = await axiosIns.post("/projects", values);
       console.log(data);
-      onOpen();
+      onClose();
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +109,7 @@ function AddForm({ isOpen, onOpenChange, onOpen }) {
                   errorMessage={errors.manager?.message}
                   className="mt-4"
                 >
-                  {loading ? (
+                  {isLoading ? (
                     <SelectItem key="loading" textValue="Loading...">
                       <div>Loading...</div>
                     </SelectItem>

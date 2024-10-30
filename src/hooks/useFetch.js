@@ -3,22 +3,26 @@ import axiosIns from "@/axios";
 
 const useFetch = (url) => {
   const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function getData() {
       try {
         const { data } = await axiosIns.get(url);
         setData(data);
-        setLoading(false);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setError(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     getData();
   }, []);
 
-  return { data, loading };
+  return { data, isLoading, error };
 };
 
 export default useFetch;
