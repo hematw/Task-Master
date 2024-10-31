@@ -25,11 +25,11 @@ const projectSchema = Joi.object({
 
 function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
   const {
-    data: { users },
+    data,
     isLoading,
   } = useFetch("/users");
 
-  console.log(users, isLoading);
+  console.log(data?.users, isLoading);
   const {
     control,
     handleSubmit,
@@ -114,7 +114,7 @@ function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
                       <div>Loading...</div>
                     </SelectItem>
                   ) : (
-                    users.map(({ _id, firstName, lastName, profile }) => (
+                    data.users.map(({ _id, firstName, lastName, profile }) => (
                       <SelectItem
                         key={_id}
                         textValue={firstName + " " + lastName}

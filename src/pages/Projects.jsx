@@ -15,6 +15,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ListPlus, Plus } from "lucide-react";
+import { Mosaic } from "react-loading-indicators";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   {
@@ -48,11 +50,20 @@ const columns = [
 ];
 
 function Projects() {
-  let {
-    data: { projects },
-  } = useFetch("/projects");
-
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+  let { data, isLoading, error } = useFetch("/projects");
+
+  if (isLoading) {
+    return (
+      <div className="max-w-5xl m-auto flex items-center justify-center">
+        <Mosaic color="#222" size="large" text="Getting data" textColor="" />
+      </div>
+    );
+  }
+
+  let { projects } = data;
 
   if (projects) {
     projects = projects.map((project) => ({
@@ -68,7 +79,6 @@ function Projects() {
       completedNum: project.tasks.filter((t) => t.status === "completed")
         .length,
     }));
-    console.log(projects);
   }
 
   const renderCell = (project, columnKey) => {
@@ -93,7 +103,11 @@ function Projects() {
         />
       )}
       <div className="max-w-7xl m-auto">
-        <Table isStriped aria-label="Collection of created Projects">
+        <Table
+          isStriped
+          aria-label="Collection of created Projects"
+          onRowAction={(key) => navigate(key)}
+        >
           <TableHeader columns={columns}>
             {(col) => <TableColumn>{col.label}</TableColumn>}
           </TableHeader>
@@ -102,7 +116,10 @@ function Projects() {
             emptyContent="No Projects to display!"
           >
             {(project) => (
-              <TableRow key={project._id}>
+              <TableRow
+                key={project._id}
+                className="cursor-pointer hover:bg-zinc-200 transition-all duration-200"
+              >
                 {(columnKey) => (
                   <TableCell>{renderCell(project, columnKey)}</TableCell>
                 )}

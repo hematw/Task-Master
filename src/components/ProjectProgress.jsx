@@ -1,6 +1,6 @@
 import { Progress } from "@nextui-org/react";
 
-function ProjectProgress({ project }) {
+function ProjectProgress({ project, className }) {
   const { tasksNum, completedNum } = project;
   const progress = (100 * completedNum) / tasksNum || 0;
 
@@ -18,6 +18,7 @@ function ProjectProgress({ project }) {
       showValueLabel
       value={progress}
       color={color}
+      className={className}
       classNames={{
         base: "max-w-md flex-row-reverse items-center",
         track: "grow",

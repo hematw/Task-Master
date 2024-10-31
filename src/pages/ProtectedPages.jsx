@@ -26,7 +26,7 @@ function ProtectedPages() {
   return (
     <div className="h-screen mx-6 relative flex flex-col">
       <Header />
-      <main className="py-32 overflow-auto">
+      <main className="p-6 my-20 overflow-auto">
         <Outlet />
       </main>
       <Navbar />

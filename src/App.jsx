@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import ProtectedPages from "./pages/ProtectedPages";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import SelectedProject from "./pages/SelectedProject";
 
 // const Home = lazy(()=> import("./pages/Home"))
 // const ProtectedPages = lazy(()=> import("./pages/ProtectedPages"))
@@ -42,6 +43,7 @@ function App() {
             <Route element={<ProtectedPages />}>
               <Route path="/" element={<Home />} />
               <Route path="projects" element={<Projects />} />
+              <Route path="projects/:id" element={<SelectedProject />} />
               <Route path="profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<h1>You are lost</h1>} />

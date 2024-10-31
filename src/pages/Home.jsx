@@ -1,20 +1,18 @@
 import { Button, Card, Skeleton, useDisclosure } from "@nextui-org/react";
 import { Album, CircleCheck, CircleMinus, Clock, Plus } from "lucide-react";
-import ProjectCard from "@/components/ProjectCard";
+import SummaryCard from "@/components/SummaryCard";
 import AddForm from "@/components/AddForm";
 import useFetch from "@/hooks/useFetch";
 import { Mosaic } from "react-loading-indicators";
 
 function Home() {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
-  const {
-    isLoading,
-    error,
-    data: { projects },
-  } = useFetch("/projects");
+  const { isLoading, error, data } = useFetch("/projects");
   
-    console.log(projects)
-
+    if (error) {
+      return <p>{error.message}</p>;
+    }
+  
   if (isLoading) {
     return (
       <div className="max-w-5xl m-auto flex items-center justify-center">
@@ -22,10 +20,7 @@ function Home() {
       </div>
     );
   }
-  
-  if (error) {
-    return <p>{error.message}</p>;
-  }
+  const { projects } = data;
 
   let completed = 0;
   let inProgress = 0;
@@ -35,7 +30,6 @@ function Home() {
     else if (p.status === "in-progress") inProgress++;
     else notStarted++;
   });
-
 
   return (
     <>
@@ -50,25 +44,25 @@ function Home() {
       <div className="max-w-5xl m-auto flex flex-col py-6">
         <h1 className="text-5xl font-semibold">Projects Overview</h1>
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-14">
-          <ProjectCard
+          <SummaryCard
             text="Projects"
             number={projects.length}
             status=""
             icon={<Album />}
           />
-          <ProjectCard
+          <SummaryCard
             text="Not Started"
             number={notStarted}
             status="notStarted"
             icon={<CircleMinus />}
           />
-          <ProjectCard
+          <SummaryCard
             text="In Progress"
             number={inProgress}
             status="inProgress"
             icon={<Clock />}
           />
-          <ProjectCard
+          <SummaryCard
             text="Completed"
             number={completed}
             status="completed"
