@@ -17,6 +17,7 @@ import {
 import { ListPlus, Plus } from "lucide-react";
 import { Mosaic } from "react-loading-indicators";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -28,15 +29,15 @@ const columns = [
     label: "MANAGER",
   },
   {
-    key: "tasksNum",
+    key: "allTasks",
     label: "TASKS",
   },
   {
-    key: "inProgressNum",
+    key: "inProgressTasks",
     label: "IN PROGRESS",
   },
   {
-    key: "completedNum",
+    key: "completedTasks",
     label: "COMPLETED",
   },
   {
@@ -48,6 +49,17 @@ const columns = [
     label: "DEADLINE",
   },
 ];
+
+const renderCell = (project, columnKey) => {
+  switch (columnKey) {
+    case "manager":
+      return <User user={getKeyValue(project, columnKey)} />;
+    case "progress":
+      return <ProjectProgress project={project} />;
+    default:
+      return getKeyValue(project, columnKey);
+  }
+};
 
 function Projects() {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
@@ -63,7 +75,7 @@ function Projects() {
     );
   }
 
-  let { projects } = data;
+  let projects = data?.projects ?? [];
 
   if (projects) {
     projects = projects.map((project) => ({
@@ -73,24 +85,8 @@ function Projects() {
         month: "short",
         day: "numeric",
       }),
-      tasksNum: project.tasks.length,
-      inProgressNum: project.tasks.filter((t) => t.status === "in-progress")
-        .length,
-      completedNum: project.tasks.filter((t) => t.status === "completed")
-        .length,
     }));
   }
-
-  const renderCell = (project, columnKey) => {
-    switch (columnKey) {
-      case "manager":
-        return <User user={getKeyValue(project, columnKey)} />;
-      case "progress":
-        return <ProjectProgress project={project} />;
-      default:
-        return getKeyValue(project, columnKey);
-    }
-  };
 
   return (
     <div>
@@ -100,13 +96,18 @@ function Projects() {
           onClose={onClose}
           onOpen={onOpen}
           onOpenChange={onOpenChange}
+          firstInputName={"title"}
+          secInputName={"description"}
+          selectElName={"manager"}
+          dateElName={"deadline"}
+          submitUrl={"/projects"}
+          title="New Project"
         />
       )}
       <div className="max-w-7xl m-auto">
         <Table
           isStriped
           aria-label="Collection of created Projects"
-          onRowAction={(key) => navigate(key)}
         >
           <TableHeader columns={columns}>
             {(col) => <TableColumn>{col.label}</TableColumn>}
@@ -118,6 +119,7 @@ function Projects() {
             {(project) => (
               <TableRow
                 key={project._id}
+                onClick={() => navigate(project._id, { state: project })}
                 className="cursor-pointer hover:bg-zinc-200 transition-all duration-200"
               >
                 {(columnKey) => (

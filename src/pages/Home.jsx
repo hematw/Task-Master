@@ -1,4 +1,4 @@
-import { Button, Card, Skeleton, useDisclosure } from "@nextui-org/react";
+import { Button, useDisclosure } from "@nextui-org/react";
 import { Album, CircleCheck, CircleMinus, Clock, Plus } from "lucide-react";
 import SummaryCard from "@/components/SummaryCard";
 import AddForm from "@/components/AddForm";
@@ -8,11 +8,11 @@ import { Mosaic } from "react-loading-indicators";
 function Home() {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
   const { isLoading, error, data } = useFetch("/projects");
-  
-    if (error) {
-      return <p>{error.message}</p>;
-    }
-  
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
   if (isLoading) {
     return (
       <div className="max-w-5xl m-auto flex items-center justify-center">
@@ -39,6 +39,11 @@ function Home() {
           onClose={onClose}
           onOpen={onOpen}
           onOpenChange={onOpenChange}
+          firstInputName={"title"}
+          secInputName={"description"}
+          selectElName={"manager"}
+          dateElName={"deadline"}
+          submitUrl={"/projects"}
         />
       )}
       <div className="max-w-5xl m-auto flex flex-col py-6">

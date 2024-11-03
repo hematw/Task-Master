@@ -1,4 +1,3 @@
-import AddForm from "@/components/AddForm";
 import User from "@/components/User";
 import {
   Button,
@@ -11,19 +10,16 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  useDisclosure,
 } from "@nextui-org/react";
-import { ListPlus, Plus } from "lucide-react";
-import { Mosaic } from "react-loading-indicators";
-import { useNavigate } from "react-router-dom";
+import { ListPlus } from "lucide-react";
 
 const columns = [
   {
-    key: "id",
+    key: "_id",
     label: "TICKET NO",
   },
   {
-    key: "task",
+    key: "title",
     label: "TASK TITLE",
   },
   {
@@ -40,10 +36,36 @@ const columns = [
   },
 ];
 
-function ProjectTasksTable({ projectTasks, className }) {
-  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+const statusColors = {
+  "not-started": "default",
+  "in-progress": "primary",
+  paused: "danger",
+  completed: "success",
+  activated: "warning",
+};
 
-  let tasks = [];
+const renderCell = (task, columnKey) => {
+  switch (columnKey) {
+    case "assignee":
+      return <User user={getKeyValue(task, columnKey)} />;
+    case "status":
+      return (
+        <Chip
+          color={statusColors[getKeyValue(task, columnKey)]}
+          variant="flat"
+          radius="md"
+          className="min-w-full inline-flex p-1.5 h-auto"
+        >
+          &#x25cf; {getKeyValue(task, columnKey)}
+        </Chip>
+      );
+    default:
+      return getKeyValue(task, columnKey);
+  }
+};
+let tasks = [];
+
+function ProjectTasksTable({ projectTasks, className }) {
   if (projectTasks) {
     tasks = projectTasks.map((task) => ({
       ...task,
@@ -55,26 +77,6 @@ function ProjectTasksTable({ projectTasks, className }) {
     }));
   }
 
-  console.log(projectTasks);
-  // if(!projectTasks.length){
-  //   return <p>No task</p>
-  // }
-
-  const renderCell = (task, columnKey) => {
-    switch (columnKey) {
-      case "assignee":
-        return <User user={getKeyValue(task, columnKey)} />;
-      case "status":
-        return (
-          <Chip color="danger" variant="flat">
-            good
-          </Chip>
-        );
-      default:
-        return getKeyValue(task, columnKey);
-    }
-  };
-
   return (
     <div className={`${className}`}>
       <Table isStriped aria-label="Collection of created Tasks" removeWrapper>
@@ -83,10 +85,7 @@ function ProjectTasksTable({ projectTasks, className }) {
         </TableHeader>
         <TableBody items={tasks} emptyContent="No Tasks to display!">
           {(task) => (
-            <TableRow
-              key={task._id}
-              className="cursor-pointer hover:bg-zinc-200 transition-all duration-200"
-            >
+            <TableRow key={task._id}>
               {(columnKey) => (
                 <TableCell>{renderCell(task, columnKey)}</TableCell>
               )}

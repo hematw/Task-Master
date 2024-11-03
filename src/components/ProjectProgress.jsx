@@ -1,8 +1,8 @@
 import { Progress } from "@nextui-org/react";
 
 function ProjectProgress({ project, className }) {
-  const { tasksNum, completedNum } = project;
-  const progress = (100 * completedNum) / tasksNum || 0;
+  const { allTasks, completedTasks } = project;
+  const progress = ((100 * completedTasks) / allTasks) || 0;
 
   /*
     0 - 40 red

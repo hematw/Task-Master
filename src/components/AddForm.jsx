@@ -12,22 +12,31 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import Joi from "joi";
-import { User, X } from "lucide-react";
+import { User } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import useFetch from "@/hooks/useFetch";
 
 const projectSchema = Joi.object({
   title: Joi.string(),
   description: Joi.string(),
+  assignee: Joi.string(),
   manager: Joi.string(),
   deadline: Joi.date(),
 });
 
-function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
-  const {
-    data,
-    isLoading,
-  } = useFetch("/users");
+function AddForm({
+  isOpen,
+  onOpenChange,
+  onOpen,
+  onClose,
+  firstInputName,
+  secInputName,
+  selectElName,
+  dateElName,
+  submitUrl,
+  title
+}) {
+  const { data, error, isLoading } = useFetch("/users");
 
   console.log(data?.users, isLoading);
   const {
@@ -37,19 +46,23 @@ function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
   } = useForm({
     resolver: joiResolver(projectSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      manager: "",
-      deadline: "",
+      [firstInputName]: "",
+      [secInputName]: "",
+      [selectElName]: "",
+      [dateElName]: "",
     },
   });
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
 
   const onSubmit = async (values) => {
     console.log(values);
     try {
-      const { data } = await axiosIns.post("/projects", values);
+      const { data } = await axiosIns.post(submitUrl, values);
       console.log(data);
-      onClose();
+      // onClose();
     } catch (error) {
       console.log(error);
     }
@@ -59,54 +72,54 @@ function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent radius="" className="p-4 w-[420px] relative">
         <ModalHeader>
-          <h2 className="text-3xl font-semibold">New Project</h2>
+          <h2 className="text-3xl font-semibold">{title}</h2>
         </ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
             <Controller
-              name="title"
+              name={firstInputName}
               control={control}
               render={({ field }) => (
                 <Input
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label="Title"
+                  label={firstInputName}
                   {...field}
-                  isInvalid={errors.title ? true : false}
-                  errorMessage={errors.title?.message}
+                  isInvalid={errors[firstInputName] ? true : false}
+                  errorMessage={errors[firstInputName]?.message}
                   className="mt-4"
                 />
               )}
             />
             <Controller
-              name="description"
+              name={secInputName}
               control={control}
               render={({ field }) => (
                 <Input
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label="Description"
+                  label={secInputName}
                   {...field}
-                  isInvalid={errors.description ? true : false}
-                  errorMessage={errors.description?.message}
+                  isInvalid={errors[secInputName] ? true : false}
+                  errorMessage={errors[secInputName]?.message}
                   className="mt-4"
                 />
               )}
             />
             <Controller
-              name="manager"
+              name={selectElName}
               control={control}
               render={({ field }) => (
                 <Select
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label="Manager"
+                  label={selectElName}
                   {...field}
-                  isInvalid={errors.manager ? true : false}
-                  errorMessage={errors.manager?.message}
+                  isInvalid={errors[selectElName] ? true : false}
+                  errorMessage={errors[selectElName]?.message}
                   className="mt-4"
                 >
                   {isLoading ? (
@@ -130,7 +143,7 @@ function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
               )}
             />
             <Controller
-              name="deadline"
+              name={dateElName}
               control={control}
               render={({ field }) => (
                 <Input
@@ -138,10 +151,10 @@ function AddForm({ isOpen, onOpenChange, onOpen, onClose }) {
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label="Deadline"
+                  label={dateElName}
                   {...field}
-                  isInvalid={errors.deadline ? true : false}
-                  errorMessage={errors.deadline?.message}
+                  isInvalid={errors[dateElName] ? true : false}
+                  errorMessage={errors[dateElName]?.message}
                   className="mt-4"
                 />
               )}
