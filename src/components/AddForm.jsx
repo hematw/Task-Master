@@ -62,7 +62,7 @@ function AddForm({
     try {
       const { data } = await axiosIns.post(submitUrl, values);
       console.log(data);
-      // onClose();
+      onClose();
     } catch (error) {
       console.log(error);
     }

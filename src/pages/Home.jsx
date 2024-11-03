@@ -7,7 +7,7 @@ import { Mosaic } from "react-loading-indicators";
 
 function Home() {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
-  const { isLoading, error, data } = useFetch("/projects");
+  const { isLoading, error, data } = useFetch("/projects/summary");
 
   if (error) {
     return <p>{error.message}</p>;
@@ -20,16 +20,12 @@ function Home() {
       </div>
     );
   }
-  const { projects } = data;
-
-  let completed = 0;
-  let inProgress = 0;
-  let notStarted = 0;
-  projects.forEach((p) => {
-    if (p.status === "completed") completed++;
-    else if (p.status === "in-progress") inProgress++;
-    else notStarted++;
-  });
+  const {
+    allProjects,
+    completedProjects,
+    notStartedProjects,
+    inProgressProjects,
+  } = data;
 
   return (
     <>
@@ -51,25 +47,25 @@ function Home() {
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mt-14">
           <SummaryCard
             text="Projects"
-            number={projects.length}
+            number={allProjects}
             status=""
             icon={<Album />}
           />
           <SummaryCard
             text="Not Started"
-            number={notStarted}
+            number={notStartedProjects}
             status="notStarted"
             icon={<CircleMinus />}
           />
           <SummaryCard
             text="In Progress"
-            number={inProgress}
+            number={inProgressProjects}
             status="inProgress"
             icon={<Clock />}
           />
           <SummaryCard
             text="Completed"
-            number={completed}
+            number={completedProjects}
             status="completed"
             icon={<CircleCheck />}
           />
