@@ -5,8 +5,10 @@ import axiosIns from "@/axios";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button, Input } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PassInput from "@/components/PassInput";
+import { toast } from "react-toastify";
+import { AuthContext } from "@/context/AuthContext";
 
 const loginSchema = Joi.object({
   email: Joi.string()
@@ -17,6 +19,7 @@ const loginSchema = Joi.object({
 
 export function LoginForm() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const {
     control,
@@ -42,19 +45,17 @@ export function LoginForm() {
   if (isLoggedIn) {
     return <Navigate to="/" />;
   }
-
+  let x = 2;
+  console.log(x++);
   // Submit handler function
   async function onSubmit(values) {
     console.log(values);
     try {
-      const {
-        data: { token, user },
-      } = await axiosIns.post("/auth/login", values);
-      localStorage.setItem("auth", JSON.stringify({ token, user }));
-      console.log(user);
+      await login(values);
       navigate("/");
     } catch (error) {
-      console.log("Error", error);
+      console.error("Error", error);
+      toast.error(error.message);
     }
   }
 

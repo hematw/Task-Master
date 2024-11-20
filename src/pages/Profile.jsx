@@ -4,15 +4,16 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { AuthContext } from "@/context/AuthContext";
 
 function Profile() {
   const fileInputRef = useRef();
   const [imgPath, setImgPath] = useState("");
   const [selectedImg, setSelectedImg] = useState();
-  // const [user, setUser] = useState(useContext(UserContext));
-  const user = JSON.parse(localStorage.getItem("auth")).user;
+  const {userData, setUser} = useContext(AuthContext);
+  const user = userData || JSON.parse(localStorage.getItem("user"));
 
   const {
     control,
@@ -59,6 +60,8 @@ function Profile() {
 
     try {
       const { data } = await axiosIns.patch("/users", formData);
+      setUser(data.user)
+      localStorage.setItem("user", JSON.stringify(data.user))
       toast.success(data.message);
     } catch (error) {
       console.log(error);

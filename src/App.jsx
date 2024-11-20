@@ -1,6 +1,6 @@
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { createContext, lazy, useState } from "react";
+import { lazy } from "react";
 import { LoginForm } from "@/pages/Login";
 import { RegisterForm } from "./pages/Register";
 import { Route, Routes, useNavigate, useHref } from "react-router-dom";
@@ -12,6 +12,7 @@ import ProtectedPages from "./pages/ProtectedPages";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import SelectedProject from "./pages/SelectedProject";
+import AuthProvider from "./context/AuthContext";
 
 // const Home = lazy(()=> import("./pages/Home"))
 // const ProtectedPages = lazy(()=> import("./pages/ProtectedPages"))
@@ -19,21 +20,11 @@ import SelectedProject from "./pages/SelectedProject";
 // const Profile = lazy(()=> import("./pages/Profile"))
 lazy(() => import("@/pages/ProtectedPages"));
 
-export const AuthContext = createContext(null);
-
 function App() {
-  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   return (
     <>
-      <AuthContext.Provider
-        value={{
-          userData,
-          setUser(obj) {
-            setUserData(obj);
-          },
-        }}
-      >
+      <AuthProvider>
         <NextUIProvider navigate={navigate} useHref={useHref}>
           <Routes>
             <Route path="signin" element={<LoginForm />} />
@@ -49,7 +40,7 @@ function App() {
             <Route path="*" element={<h1>You are lost</h1>} />
           </Routes>
         </NextUIProvider>
-      </AuthContext.Provider>
+      </AuthProvider>
     </>
   );
 }

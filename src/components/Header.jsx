@@ -1,29 +1,18 @@
-import { AuthContext } from "@/App";
-import axiosIns from "@/axios";
+import { AuthContext } from "@/context/AuthContext";
 import { Avatar, Badge, Button } from "@nextui-org/react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function Header() {
-  const [user, setUser] = useState();
-  const navigate = useNavigate();
+  const { userData, logout, setUser } = useContext(AuthContext);
 
   const handleSignOut = async () => {
-    try {
-      const { data } = await axiosIns.get("/auth/signout");
-      localStorage.removeItem("auth");
-      navigate("signin");
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong try again later");
-    }
+    await logout();
   };
 
   useEffect(() => {
-    const loggedUser = JSON.parse(localStorage.getItem("auth")).user;
+    const loggedUser = JSON.parse(localStorage.getItem("user"));
     setUser(loggedUser);
   }, []);
 
@@ -35,12 +24,12 @@ export default function Header() {
           <Avatar
             radius="sm"
             fallback={<UserRound />}
-            src={user?.profile}
+            src={userData?.profile}
             className="text-white"
           />
           <div className="ml-2">
-            <p className="font-semibold">{user?.firstName}</p>
-            <p className="text-sm text-gray-p">{user?.email}</p>
+            <p className="font-semibold">{userData?.firstName}</p>
+            <p className="text-sm text-gray-p">{userData?.email}</p>
           </div>
         </div>
         <h3 className="font-semibold text-xl">Projects</h3>
