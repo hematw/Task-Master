@@ -65,7 +65,7 @@ const renderCell = (task, columnKey) => {
 };
 let tasks = [];
 
-function ProjectTasksTable({ projectTasks, className }) {
+function ProjectTasksTable({ projectTasks, onMoreClick, className }) {
   if (projectTasks) {
     tasks = projectTasks.map((task) => ({
       ...task,
@@ -101,6 +101,7 @@ function ProjectTasksTable({ projectTasks, className }) {
           radius="sm"
           endContent={<ListPlus />}
           className="hover:bg-black hover:text-white mt-6 border-2 border-black"
+          onClick={onMoreClick}
         >
           More
         </Button>

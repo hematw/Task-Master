@@ -70,7 +70,7 @@ export function RegisterForm() {
       localStorage.setItem("auth", JSON.stringify({ token, user }));
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error.response) {
         if (error.response.status === 409) {
           setDuplicateError(error.response?.data.message);

@@ -27,7 +27,7 @@ const projectSchema = Joi.object({
 function AddForm({
   isOpen,
   onOpenChange,
-  onOpen,
+  onSubmitSuccess,
   onClose,
   firstInputName,
   secInputName,
@@ -62,6 +62,7 @@ function AddForm({
     try {
       const { data } = await axiosIns.post(submitUrl, values);
       console.log(data);
+      onSubmitSuccess()
       onClose();
     } catch (error) {
       console.log(error);

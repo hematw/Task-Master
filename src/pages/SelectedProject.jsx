@@ -1,5 +1,5 @@
 import useFetch from "@/hooks/useFetch";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navigate,
   useLocation,
@@ -10,16 +10,66 @@ import ProjectCard from "@/components/ProjectCard";
 import ProjectTasksTable from "@/components/ProjectTasksTable";
 import { Button, Input } from "@nextui-org/react";
 import { Search } from "lucide-react";
+import { toast } from "react-toastify";
+import axiosIns from "@/axios";
+import { Mosaic } from "react-loading-indicators";
 
 function SelectedProject() {
   const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { isLoading, data, error } = useFetch(`/tasks?projectId=${id}`);
+  const [needFetch, setNeedFetch] = useState(false);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [tasks, setTasks] = useState([]);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  if (!data) return <p>No data found</p>;
+  const handlePagination = () => {
+    setPage((prevPage) => (prevPage < totalPages ? ++prevPage : 1));
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    const getTasks = async () => {
+      try {
+        const { data } = await axiosIns.get(`/tasks?projectId=${id}`, {
+          params: {
+            page,
+          },
+        });
+
+        console.log(data);
+        setTotalPages(data.totalPages);
+        setTasks(
+          data.tasks.map((task) => ({
+            ...task,
+            deadline: new Date(task.deadline).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }),
+          }))
+        );
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          error.message || "Something went wrong please try again later"
+        );
+      } finally {
+        setIsLoading(false);
+        setNeedFetch(false);
+      }
+    };
+    getTasks();
+  }, [page, needFetch]);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-5xl m-auto flex items-center justify-center">
+        <Mosaic color="#222" size="large" text="Getting data" textColor="" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1460px] m-auto">
@@ -47,10 +97,14 @@ function SelectedProject() {
         />
       </div>
       <div className="grid grid-cols-3 gap-14 mt-8 items-start">
-        <ProjectCard project={state} />
+        <ProjectCard
+          project={state}
+          onSubmitSuccess={() => setNeedFetch(!needFetch)}
+        />
         <ProjectTasksTable
-          projectTasks={data.tasks}
+          projectTasks={tasks}
           className="col-span-2"
+          onMoreClick={handlePagination}
         />
       </div>
     </div>

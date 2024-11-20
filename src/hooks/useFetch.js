@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosIns from "@/axios";
 
-const useFetch = (url) => {
+const useFetch = (url, dependency, cb) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,10 +18,11 @@ const useFetch = (url) => {
         setError(error);
       } finally {
         setIsLoading(false);
+        cb(true)
       }
     }
     getData();
-  }, [url]); // Add `url` as a dependency
+  }, [url, dependency]); // Add `url` as a dependency
 
   return { data, isLoading, error };
 };

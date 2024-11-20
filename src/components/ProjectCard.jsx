@@ -4,7 +4,7 @@ import { Edit, Plus } from "lucide-react";
 import ProjectProgress from "./ProjectProgress";
 import AddForm from "./AddForm";
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onSubmitSuccess }) {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
 
   return (
@@ -21,6 +21,7 @@ function ProjectCard({ project }) {
           dateElName={"deadline"}
           submitUrl={`/tasks?projectId=${project._id}`}
           title="New Task"
+          onSubmitSuccess={onSubmitSuccess}
         />
       )}
       <Card className="p-4 max-w-xl" radius="lg">
