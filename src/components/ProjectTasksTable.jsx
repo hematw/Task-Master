@@ -10,8 +10,12 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
 import { ListPlus } from "lucide-react";
+import { useState } from "react";
+import Status from "./Status";
+import EditTask from "./EditTask";
 
 const columns = [
   {
@@ -36,29 +40,12 @@ const columns = [
   },
 ];
 
-const statusColors = {
-  "not-started": "default",
-  "in-progress": "primary",
-  paused: "danger",
-  completed: "success",
-  activated: "warning",
-};
-
 const renderCell = (task, columnKey) => {
   switch (columnKey) {
     case "assignee":
       return <User user={getKeyValue(task, columnKey)} />;
     case "status":
-      return (
-        <Chip
-          color={statusColors[getKeyValue(task, columnKey)]}
-          variant="flat"
-          radius="md"
-          className="min-w-full inline-flex p-1.5 h-auto"
-        >
-          &#x25cf; {getKeyValue(task, columnKey)}
-        </Chip>
-      );
+      return <Status value={getKeyValue(task, columnKey)} />;
     default:
       return getKeyValue(task, columnKey);
   }
@@ -66,6 +53,9 @@ const renderCell = (task, columnKey) => {
 let tasks = [];
 
 function ProjectTasksTable({ projectTasks, onMoreClick, className }) {
+  const [selectedTask, setSelectedTask] = useState(null);
+  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+
   if (projectTasks) {
     tasks = projectTasks.map((task) => ({
       ...task,
@@ -77,15 +67,45 @@ function ProjectTasksTable({ projectTasks, onMoreClick, className }) {
     }));
   }
 
+  console.log(selectedTask);
   return (
     <div className={`${className}`}>
-      <Table isStriped aria-label="Collection of created Tasks" removeWrapper>
+      {selectedTask && (
+        <EditTask
+          taskId={selectedTask._id}
+          title={selectedTask.title}
+          assignee={selectedTask.assignee._id}
+          deadline={new Date(selectedTask.deadline).toISOString().slice(0, 10)}
+          description={selectedTask.description}
+          status={selectedTask.status}
+          isEditModalOpen={isOpen}
+          onEditModalClose={() => {
+            onClose();
+            setSelectedTask(null);
+          }}
+          onEditModalOpen={onOpen}
+          onEditModalOpenChange={onOpenChange}
+        />
+      )}
+      <Table
+        isStriped
+        aria-label="Collection of created Tasks"
+        removeWrapper
+        isHeaderSticky
+      >
         <TableHeader columns={columns}>
           {(col) => <TableColumn>{col.label}</TableColumn>}
         </TableHeader>
         <TableBody items={tasks} emptyContent="No Tasks to display!">
           {(task) => (
-            <TableRow key={task._id}>
+            <TableRow
+              className="hover:bg-zinc-200 hover:shadow-small duration-150 cursor-pointer"
+              key={task._id}
+              onClick={() => {
+                setSelectedTask(task);
+                onOpen();
+              }}
+            >
               {(columnKey) => (
                 <TableCell>{renderCell(task, columnKey)}</TableCell>
               )}
@@ -106,6 +126,9 @@ function ProjectTasksTable({ projectTasks, onMoreClick, className }) {
           More
         </Button>
       </div>
+      {/* <EditForm 
+      title={}
+      /> */}
     </div>
   );
 }

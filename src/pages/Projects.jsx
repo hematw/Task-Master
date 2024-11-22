@@ -148,7 +148,7 @@ function Projects() {
               <TableRow
                 key={project._id}
                 onClick={() => navigate(project._id, { state: project })}
-                className="cursor-pointer hover:bg-zinc-200 transition-all duration-200"
+                className="hover:bg-zinc-200 hover:shadow-inner duration-150 cursor-pointer"
               >
                 {(columnKey) => (
                   <TableCell>{renderCell(project, columnKey)}</TableCell>

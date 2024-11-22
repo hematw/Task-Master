@@ -3,13 +3,28 @@ import User from "./User";
 import { Edit, Plus } from "lucide-react";
 import ProjectProgress from "./ProjectProgress";
 import AddForm from "./AddForm";
+import EditProject from "./EditProject";
+import { useState } from "react";
 
 function ProjectCard({ project, onSubmitSuccess }) {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+  const [isOnEdit, setIsOnEdit] = useState(false);
 
   return (
     <>
-      {isOpen && (
+      {isOnEdit ? (
+        <EditProject
+          projectId={project._id}
+          title={project.title}
+          manager={project.manager._id}
+          deadline={new Date(project.deadline).toISOString().slice(0, 10)}
+          description={project.description}
+          isEditModalOpen={isOpen}
+          onEditModalClose={onClose}
+          onEditModalOpen={onOpen}
+          onEditModalOpenChange={onOpenChange}
+        />
+      ) : (
         <AddForm
           isOpen={isOpen}
           onClose={onClose}
@@ -56,7 +71,14 @@ function ProjectCard({ project, onSubmitSuccess }) {
 
           {/* footer buttons */}
           <div className="flex justify-between items-center">
-            <Button isIconOnly variant="flat" col>
+            <Button
+              isIconOnly
+              variant="flat"
+              onClick={() => {
+                setIsOnEdit(true);
+                onOpen();
+              }}
+            >
               <Edit />
             </Button>
             <Button
@@ -65,7 +87,10 @@ function ProjectCard({ project, onSubmitSuccess }) {
               variant="ghost"
               radius="sm"
               className="hover:bg-black hover:text-white border-2 border-black"
-              onClick={onOpen}
+              onClick={() => {
+                setIsOnEdit(false);
+                onOpen();
+              }}
             >
               Add Task
             </Button>

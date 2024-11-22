@@ -67,6 +67,7 @@ export function RegisterForm() {
         data: { token, user },
       } = await axiosIns.post("/auth/register", values);
 
+      localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       navigate("/");
     } catch (error) {
