@@ -2,7 +2,8 @@ import { AuthContext } from "@/context/AuthContext";
 import { Avatar, Badge, Button } from "@nextui-org/react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import Notifications from "./Notifications";
 
 export default function Header() {
   const { userData, logout, setUser } = useContext(AuthContext);
@@ -34,11 +35,7 @@ export default function Header() {
         </div>
         <h3 className="font-semibold text-xl">Projects</h3>
         <div className="flex items-center gap-2">
-          <Badge content="4" shape="rectangle" color="danger">
-            <Button isIconOnly radius="sm" className="bg-black text-white">
-              <Bell />
-            </Button>
-          </Badge>
+          <Notifications />
           <Button
             variant="light"
             radius="sm"
