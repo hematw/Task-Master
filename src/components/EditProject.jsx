@@ -54,13 +54,20 @@ function EditProject({
     },
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await axiosIns.patch(`/projects/${projectId}`, values);
+      console.log(data.message);
+      toast.success(data.message);
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.message);
+    }
   };
 
   const handleDelete = async () => {
     try {
-      const { data } = await axiosIns.delete(`projects/${projectId}`);
+      const { data } = await axiosIns.delete(`/projects/${projectId}`);
       toast.success(data.message);
     } catch (error) {
       console.error(error);
@@ -117,16 +124,17 @@ function EditProject({
                           ))
                         }
                       >
-                        {(user) =>{ 
-                          console.log(user)
+                        {(user) => {
+                          console.log(user);
                           return (
-                          <SelectItem
-                            key={user._id}
-                            textValue={user.firstName + " " + user.lastName}
-                          >
-                            <User user={user} />
-                          </SelectItem>
-                        )}}
+                            <SelectItem
+                              key={user._id}
+                              textValue={user.firstName + " " + user.lastName}
+                            >
+                              <User user={user} />
+                            </SelectItem>
+                          );
+                        }}
                       </Select>
                     </div>
                   )}

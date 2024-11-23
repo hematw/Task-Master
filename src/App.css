@@ -13,3 +13,15 @@ body {
 .nav-link {
   @apply inline-flex gap-1 p-2 text-gray-p hover:bg-black hover:text-white rounded-xl duration-300;
 }
+
+*::-webkit-scrollbar {
+  @apply w-2 h-2
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply rounded-xl bg-gray-600;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-600;
+}

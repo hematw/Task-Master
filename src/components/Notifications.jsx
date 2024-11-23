@@ -1,82 +1,91 @@
-import React from "react";
-import { Dropdown, DropdownItem, DropdownTrigger, DropdownMenu, Button } from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownMenu,
+  Button,
+} from "@nextui-org/react";
 import axiosIns from "@/axios";
-import { Badge, Bell } from "lucide-react";
+import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
-
-const notifications = [
-    {
-        id: 1,
-        title: "Status Change",
-        description: "Mohib changed the status for ticket no 9837 from Not Started to In Progress",
-    },
-    {
-        id: 2,
-        title: "Deadline Change",
-        description: "Mohib changed the status for ticket no 9837 from Not Started to In Progress",
-    },
-    {
-        id: 3,
-        title: "Title Change",
-        description: "Mohib changed the status for ticket no 9837 from Not Started to In Progress",
-    },
-    {
-        id: 4,
-        title: "Notification Title",
-        description: "Mohib changed the status for ticket no 9837 from Not Started to In Progress",
-    },
-    {
-        id: 5,
-        title: "Notification Title",
-        description: "Mohib changed the status for ticket no 9837 from Not Started to In Progress",
-    },
-];
+import { toast } from "react-toastify";
 
 function Notifications() {
-    // const [notifications, setNotifications] = useState([])
+  const [notifications, setNotifications] = useState([]);
+  const unread = notifications.filter((notification) => notification.unread);
 
-    useEffect(() => {
-        const getNotifications = async () => {
-            try {
-                const { data } = await axiosIns.get("/notifications")
-                console.log(data)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        getNotifications()
-    })
+  useEffect(() => {
+    const getNotifications = async () => {
+      try {
+        const { data } = await axiosIns.get("/notifications");
+        setNotifications(data.notifications);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getNotifications();
+  }, []);
 
-    return (
-        <Dropdown className="relative">
-            <DropdownTrigger>
-                <Button isIconOnly radius="sm" className="bg-black text-white">
-                    <Badge content="4" shape="rectangle" color="danger">
-                        <Bell />
-                        open
-                    </Badge>
-                </Button>
-            </DropdownTrigger>
-            <DropdownMenu from className="max-w-md w-[400px] mx-auto bg-white shadow-md rounded-lg p-4 absolute">
-                {notifications.map((notification) => (
-                    <DropdownItem
-                        key={notification.id}
-                    ><div className="flex items-start gap-4 p-3 border-b last:border-none">
-                            <div className="flex-shrink-0">
-                                <div className="bg-black text-white p-2 rounded-lg">
-                                    <Bell size={20} />
-                                </div>
-                            </div>
-                            <div>
-                                <h4 className="font-semibold">{notification.title}</h4>
-                                <p className="text-gray-600 text-sm">{notification.description}</p>
-                            </div>
-                        </div>
-                    </DropdownItem>
-                ))}
-            </DropdownMenu>
-        </Dropdown>
-    )
+  const handleReadNotification = async (id) => {
+    setNotifications((prev) =>
+      prev.map((notify) =>
+        id === notify._id ? { ...notify, unread: false } : notify
+      )
+    );
+    try {
+      const { data } = await axiosIns.post(`/notifications/${id}`);
+      console.log(data);
+      toast.success(data.message);
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <Dropdown className="relative">
+      <DropdownTrigger className="z-0 text-sm">
+        <Button isIconOnly radius="sm" className="bg-black text-white">
+          {!!unread.length && (
+            <span className="block w-4 h-4 text-xs bg-red-500 rounded-full absolute top-0 right-0 z-100">
+              {unread.length}
+            </span>
+          )}
+          <Bell />
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu className="max-w-md w-[430px] mx-auto max-h-[600px] overflow-auto bg-white shadow-xl rounded-xl p-4 absolute top-0 right-0 border-2 border-black scroll">
+        {notifications.map((notification) => (
+          <DropdownItem
+            key={notification._id}
+            textValue={notification.title}
+            className={`border my-1 overflow-auto shadow-md ${
+              !notification.unread && "bg-gray-200"
+            }`}
+            onClick={() => handleReadNotification(notification._id)}
+          >
+            <div className="flex items-center gap-4 p-2 border-b last:border-none">
+              <div className="flex-shrink-0">
+                <div
+                  className={`${
+                    notification.unread ? "bg-black" : "bg-gray-400"
+                  } text-white p-2 rounded-lg`}
+                >
+                  <Bell size={20} />
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold">{notification.title}</h4>
+                <p className="text-gray-600 text-sm line-clamp-2">
+                  {notification.message}
+                </p>
+              </div>
+            </div>
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
+  );
 }
 
-export default Notifications
+export default Notifications;

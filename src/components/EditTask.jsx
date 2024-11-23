@@ -66,13 +66,22 @@ function EditTask({
     },
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await axiosIns.patch(`/tasks/${taskId}`, values);
+      console.log(data.message);
+      toast.success(data.message);
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.message);
+    } finally {
+      onEditModalClose();
+    }
   };
 
   const handleDelete = async () => {
     try {
-      const { data } = await axiosIns.delete(`tasks/${taskId}`);
+      const { data } = await axiosIns.delete(`/tasks/${taskId}`);
       toast.success(data.message);
     } catch (error) {
       console.error(error);
@@ -86,14 +95,14 @@ function EditTask({
   return (
     <>
       <Modal isOpen={isEditModalOpen} onOpenChange={onEditModalClose}>
-        {isOpen && (
+        {/* {isOpen && (
           <DeleteConfirmModal
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             onOpen={onOpen}
             onDelete={handleDelete}
           />
-        )}
+        )} */}
         <ModalContent className="min-w-[520px] p-4">
           {(onClose) => (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -205,7 +214,7 @@ function EditTask({
                       placeholder={"Description"}
                       radius="sm"
                       {...field}
-                       className="mt-4"
+                      className="mt-4"
                       isInvalid={errors.description ? true : false}
                       errorMessage={errors.description?.message}
                     />
