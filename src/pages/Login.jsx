@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import PassInput from "@/components/PassInput";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
+import GoogleAuth from "@/components/GoogleAuth";
 
 const loginSchema = Joi.object({
   email: Joi.string()
@@ -63,6 +64,7 @@ export function LoginForm() {
     <div className="h-screen flex items-center">
       <div className="m-auto w-96 ">
         <h1 className="text-3xl font-semibold text-center">TaskMaster</h1>
+        <GoogleAuth/>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="email"

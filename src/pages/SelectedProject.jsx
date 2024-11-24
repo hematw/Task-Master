@@ -37,8 +37,6 @@ function SelectedProject() {
             page,
           },
         });
-
-        console.log(data);
         setTotalPages(data.totalPages);
         setTasks(
           data.tasks.map((task) => ({

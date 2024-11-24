@@ -124,13 +124,14 @@ function EditTask({
                         variant="bordered"
                         radius="sm"
                         size="sm"
-                        aria-label="Select task assigne"
+                        aria-label="Select task assignee"
                         isInvalid={errors.assignee ? true : false}
                         errorMessage={errors.assignee?.message}
                         className="w-1/2"
                         classNames={{
                           trigger: "border-none",
                         }}
+                        placeholder="Choose assignee"
                         defaultSelectedKeys={[value]}
                         renderValue={(users) =>
                           users.map((user) => (
@@ -169,6 +170,7 @@ function EditTask({
                         classNames={{
                           trigger: "border-none",
                         }}
+                        placeholder="Select Status"
                         defaultSelectedKeys={[value]}
                         renderValue={(items) => {
                           return items.map((item) => (

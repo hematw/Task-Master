@@ -117,7 +117,9 @@ function EditProject({
                         classNames={{
                           trigger: "border-none",
                         }}
+                        placeholder="Select manager"
                         defaultSelectedKeys={[value]}
+                        selectedKeys={[value]}
                         renderValue={(users) =>
                           users.map((user) => (
                             <User user={user.data} key={user.data._id} />

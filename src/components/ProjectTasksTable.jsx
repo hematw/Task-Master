@@ -67,7 +67,6 @@ function ProjectTasksTable({ projectTasks, onMoreClick, className }) {
     }));
   }
 
-  console.log(selectedTask);
   return (
     <div className={`${className}`}>
       {selectedTask && (
