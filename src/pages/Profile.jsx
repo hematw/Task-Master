@@ -26,7 +26,7 @@ function Profile() {
       lastName: user.lastName,
       country: user.country,
       profile: user.profile,
-      dob: new Date(user.dob).toISOString().substring(0, 10),
+      dob: user.dob ?new Date(user.dob)?.toISOString().substring(0, 10) : "",
       currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
@@ -41,7 +41,6 @@ function Profile() {
   // handle file input change
   const handleChange = () => {
     const path = URL.createObjectURL(fileInputRef.current.files[0]);
-    console.log(path);
     setImgPath(path);
     setSelectedImg(fileInputRef.current.files[0]);
   };
@@ -64,7 +63,7 @@ function Profile() {
       localStorage.setItem("user", JSON.stringify(data.user))
       toast.success(data.message);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error.response) {
         toast.error(error.response.data.message);
       } else {

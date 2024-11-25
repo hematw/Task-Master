@@ -49,7 +49,6 @@ function ResetPassword() {
 
   // Submit handler function
   async function onSubmit(values) {
-    console.log(values);
     try {
       const { data } = await axiosIns.post(
         `/auth/reset-password?token=${token}&user=${user}`,
@@ -58,7 +57,7 @@ function ResetPassword() {
       reset();
       toast.success(data.message);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(
         error.response.data.message ||
           "Something went wrong, please try again later!"

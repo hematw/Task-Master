@@ -19,7 +19,6 @@ export default function Header() {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       <header className="flex justify-between items-center w-full border-b-2 py-2 bg-white absolute top-0 left-0 z-20">
         <div className="flex items-center">
           <Avatar

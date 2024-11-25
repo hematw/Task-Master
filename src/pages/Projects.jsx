@@ -126,10 +126,7 @@ function Projects() {
           onClose={onClose}
           onOpen={onOpen}
           onOpenChange={onOpenChange}
-          firstInputName={"title"}
-          secInputName={"description"}
           selectElName={"manager"}
-          dateElName={"deadline"}
           submitUrl={"/projects"}
           title="New Project"
           onSubmitSuccess={() => setNeedFetch(true)}

@@ -15,6 +15,7 @@ import Joi from "joi";
 import { User } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import useFetch from "@/hooks/useFetch";
+import { toast } from "react-toastify";
 
 const projectSchema = Joi.object({
   title: Joi.string(),
@@ -29,16 +30,12 @@ function AddForm({
   onOpenChange,
   onSubmitSuccess,
   onClose,
-  firstInputName,
-  secInputName,
   selectElName,
-  dateElName,
   submitUrl,
   title
 }) {
   const { data, error, isLoading } = useFetch("/users");
 
-  console.log(data?.users, isLoading);
   const {
     control,
     handleSubmit,
@@ -46,10 +43,10 @@ function AddForm({
   } = useForm({
     resolver: joiResolver(projectSchema),
     defaultValues: {
-      [firstInputName]: "",
-      [secInputName]: "",
+      title: "",
+      description: "",
+      deadline: "",
       [selectElName]: "",
-      [dateElName]: "",
     },
   });
 
@@ -58,14 +55,15 @@ function AddForm({
   }
 
   const onSubmit = async (values) => {
-    console.log(values);
     try {
       const { data } = await axiosIns.post(submitUrl, values);
       console.log(data);
+      toast.success(data.message)
       onSubmitSuccess()
       onClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.success(error.response.message)
     }
   };
 
@@ -78,33 +76,33 @@ function AddForm({
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
             <Controller
-              name={firstInputName}
+              name="title"
               control={control}
               render={({ field }) => (
                 <Input
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label={firstInputName}
+                  label="Title"
                   {...field}
-                  isInvalid={errors[firstInputName] ? true : false}
-                  errorMessage={errors[firstInputName]?.message}
+                  isInvalid={errors.title ? true : false}
+                  errorMessage={errors.title?.message}
                   className="mt-4"
                 />
               )}
             />
             <Controller
-              name={secInputName}
+              name="description"
               control={control}
               render={({ field }) => (
                 <Input
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label={secInputName}
+                  label="Description"
                   {...field}
-                  isInvalid={errors[secInputName] ? true : false}
-                  errorMessage={errors[secInputName]?.message}
+                  isInvalid={errors.description ? true : false}
+                  errorMessage={errors.description?.message}
                   className="mt-4"
                 />
               )}
@@ -144,7 +142,7 @@ function AddForm({
               )}
             />
             <Controller
-              name={dateElName}
+              name="deadline"
               control={control}
               render={({ field }) => (
                 <Input
@@ -152,10 +150,10 @@ function AddForm({
                   variant="bordered"
                   radius="sm"
                   size="sm"
-                  label={dateElName}
+                  label="Deadline "
                   {...field}
-                  isInvalid={errors[dateElName] ? true : false}
-                  errorMessage={errors[dateElName]?.message}
+                  isInvalid={errors.deadline ? true : false}
+                  errorMessage={errors.deadline?.message}
                   className="mt-4"
                 />
               )}

@@ -95,14 +95,15 @@ function EditTask({
   return (
     <>
       <Modal isOpen={isEditModalOpen} onOpenChange={onEditModalClose}>
-        {/* {isOpen && (
+        {isOpen && (
           <DeleteConfirmModal
+            title={"Delete Task?"}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             onOpen={onOpen}
             onDelete={handleDelete}
           />
-        )} */}
+        )}
         <ModalContent className="min-w-[520px] p-4">
           {(onClose) => (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -245,11 +246,7 @@ function EditTask({
 
                 <Button
                   isIconOnly
-                  onClick={() => {
-                    console.log(isOpen);
-                    onOpen();
-                    console.log("hello");
-                  }}
+                  onClick={onOpen}
                   radius="sm"
                   variant="flat"
                   color="danger"

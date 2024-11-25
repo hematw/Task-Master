@@ -68,7 +68,7 @@ function ProjectTasksTable({ projectTasks, onMoreClick, className }) {
   }
 
   return (
-    <div className={`${className}`}>
+    <div className={`overflow-auto  ${className}`}>
       {selectedTask && (
         <EditTask
           taskId={selectedTask._id}

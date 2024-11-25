@@ -34,7 +34,6 @@ function Notifications() {
     );
     try {
       const { data } = await axiosIns.post(`/notifications/${id}`);
-      console.log(data);
       toast.success(data.message);
     } catch (error) {
       console.error(error);

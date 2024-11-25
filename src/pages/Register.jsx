@@ -60,7 +60,6 @@ export function RegisterForm() {
 
   // Submit handler function
   async function onSubmit(values) {
-    console.log(values);
     setDuplicateError("");
     try {
       const {
@@ -83,10 +82,10 @@ export function RegisterForm() {
     }
   }
 
-  if (serverError) {
-    console.log(serverError);
-  }
-  console.log(duplicateError);
+  // if (serverError) {
+  //   console.error(serverError);
+  // }
+  // console.error(duplicateError);
 
   return (
     <div className="h-screen flex items-center">

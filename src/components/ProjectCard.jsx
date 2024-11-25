@@ -12,33 +12,31 @@ function ProjectCard({ project, onSubmitSuccess }) {
 
   return (
     <>
-      {isOnEdit ? (
-        <EditProject
-          projectId={project._id}
-          title={project.title}
-          manager={project.manager._id}
-          deadline={new Date(project.deadline).toISOString().slice(0, 10)}
-          description={project.description}
-          isEditModalOpen={isOpen}
-          onEditModalClose={onClose}
-          onEditModalOpen={onOpen}
-          onEditModalOpenChange={onOpenChange}
-        />
-      ) : (
-        <AddForm
-          isOpen={isOpen}
-          onClose={onClose}
-          onOpen={onOpen}
-          onOpenChange={onOpenChange}
-          firstInputName={"title"}
-          secInputName={"description"}
-          selectElName={"assignee"}
-          dateElName={"deadline"}
-          submitUrl={`/tasks?projectId=${project._id}`}
-          title="New Task"
-          onSubmitSuccess={onSubmitSuccess}
-        />
-      )}
+      {isOpen &&
+        (isOnEdit ? (
+          <EditProject
+            projectId={project._id}
+            title={project.title}
+            manager={project.manager._id}
+            deadline={new Date(project.deadline).toISOString().slice(0, 10)}
+            description={project.description}
+            isEditModalOpen={isOpen}
+            onEditModalClose={onClose}
+            onEditModalOpen={onOpen}
+            onEditModalOpenChange={onOpenChange}
+          />
+        ) : (
+          <AddForm
+            isOpen={isOpen}
+            onClose={onClose}
+            onOpen={onOpen}
+            onOpenChange={onOpenChange}
+            selectElName={"assignee"}
+            submitUrl={`/tasks?projectId=${project._id}`}
+            title="New Task"
+            onSubmitSuccess={onSubmitSuccess}
+          />
+        ))}
       <Card className="p-4 max-w-xl" radius="lg">
         <CardBody className="flex gap-10">
           {/* title and description */}

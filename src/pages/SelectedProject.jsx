@@ -23,6 +23,7 @@ function SelectedProject() {
   const [isLoading, setIsLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [tasks, setTasks] = useState([]);
+  const [search, setSearch] = useState("");
 
   const handlePagination = () => {
     setPage((prevPage) => (prevPage < totalPages ? ++prevPage : 1));
@@ -61,6 +62,39 @@ function SelectedProject() {
     getTasks();
   }, [page, needFetch]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // if (search.length >= 3) {
+      try {
+        const { data } = await axiosIns.get(`/tasks?projectId=${id}`, {
+          params: {
+            page,
+            search
+          },
+        });
+        setTotalPages(data.totalPages);
+        setTasks(
+          data.tasks.map((task) => ({
+            ...task,
+            deadline: new Date(task.deadline).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }),
+          }))
+        );
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          error.message || "Something went wrong please try again later"
+        );
+      } finally {
+        setIsLoading(false);
+        setNeedFetch(false);
+      }
+    // }
+  };
+
   if (isLoading) {
     return (
       <div className="max-w-5xl m-auto flex items-center justify-center">
@@ -80,19 +114,22 @@ function SelectedProject() {
         >
           &larr;
         </Button>
-        <Input
-          placeholder="Search"
-          startContent={<Search size={32} />}
-          type="search"
-          radius="sm"
-          classNames={{
-            base: "max-w-full sm:max-w-[16rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-medium",
-            inputWrapper:
-              "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-          }}
-        />
+        <form onSubmit={handleSubmit}>
+          <Input
+            placeholder="Search"
+            startContent={<Search size={32} />}
+            type="search"
+            radius="sm"
+            onChange={(e) => setSearch(e.target.value)}
+            classNames={{
+              base: "max-w-full sm:max-w-[16rem] h-10",
+              mainWrapper: "h-full",
+              input: "text-medium",
+              inputWrapper:
+                "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+            }}
+          />
+        </form>
       </div>
       <div className="grid grid-cols-3 gap-14 mt-8 items-start">
         <ProjectCard

@@ -9,11 +9,10 @@ import { useNavigate } from "react-router-dom";
 
 function GoogleAuth() {
   const { setUser } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
-      console.log(codeResponse);
       const { data } = await axiosIns.post("/auth/google", {
         access_token: codeResponse.access_token,
       });
@@ -21,10 +20,10 @@ function GoogleAuth() {
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
-      navigate("/")
+      navigate("/");
     },
     onError: (errorResponse) => {
-      console.log(errorResponse);
+      console.error(errorResponse);
       toast.error("Google Login field");
     },
   });

@@ -21,6 +21,7 @@ import DeleteConfirmModal from "./DeleteConfirmModal";
 import axiosIns from "@/axios";
 import { toast } from "react-toastify";
 import User from "./User";
+import { useNavigate } from "react-router-dom";
 
 const projectSchema = Joi.object({
   //   title: Joi.string(),
@@ -40,6 +41,7 @@ function EditProject({
 }) {
   const { data } = useFetch("/users");
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   const {
     control,
@@ -69,6 +71,7 @@ function EditProject({
     try {
       const { data } = await axiosIns.delete(`/projects/${projectId}`);
       toast.success(data.message);
+      navigate("/projects");
     } catch (error) {
       console.error(error);
       toast.error(error.message);
@@ -83,6 +86,7 @@ function EditProject({
       <Modal isOpen={isEditModalOpen} onOpenChange={onEditModalClose}>
         {isOpen && (
           <DeleteConfirmModal
+            title={"Delete Project?"}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
             onOpen={onOpen}
@@ -126,17 +130,14 @@ function EditProject({
                           ))
                         }
                       >
-                        {(user) => {
-                          console.log(user);
-                          return (
-                            <SelectItem
-                              key={user._id}
-                              textValue={user.firstName + " " + user.lastName}
-                            >
-                              <User user={user} />
-                            </SelectItem>
-                          );
-                        }}
+                        {(user) => (
+                          <SelectItem
+                            key={user._id}
+                            textValue={user.firstName + " " + user.lastName}
+                          >
+                            <User user={user} />
+                          </SelectItem>
+                        )}
                       </Select>
                     </div>
                   )}

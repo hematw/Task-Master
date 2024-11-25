@@ -35,6 +35,7 @@ export function LoginForm() {
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -46,17 +47,23 @@ export function LoginForm() {
   if (isLoggedIn) {
     return <Navigate to="/" />;
   }
-  let x = 2;
-  console.log(x++);
+
   // Submit handler function
   async function onSubmit(values) {
-    console.log(values);
+    setIsLoading(true);
+    const toastId = toast.loading("Loading...", { autoClose: isLoading });
     try {
       await login(values);
       navigate("/");
     } catch (error) {
       console.error("Error", error);
-      toast.error(error.message);
+      toast.error(
+        error?.response.data.message ||
+          "Something went wrong please try again later"
+      );
+    } finally {
+      setIsLoading(false);
+      toast.dismiss(toastId);
     }
   }
 
@@ -64,7 +71,28 @@ export function LoginForm() {
     <div className="h-screen flex items-center">
       <div className="m-auto w-96 ">
         <h1 className="text-3xl font-semibold text-center">TaskMaster</h1>
-        <GoogleAuth/>
+        <div className="mt-10">
+          <GoogleAuth isLoading={isLoading} setIsLoading={setIsLoading} />
+        </div>
+        <div style={{ textAlign: "center", margin: "20px 0" }}>
+          <hr
+            style={{
+              border: "none",
+              borderTop: "1px solid #ccc",
+              width: "45%",
+              display: "inline-block",
+            }}
+          />
+          <span style={{ padding: "0 10px", color: "#888" }}>or</span>
+          <hr
+            style={{
+              border: "none",
+              borderTop: "1px solid #ccc",
+              width: "45%",
+              display: "inline-block",
+            }}
+          />
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="email"
@@ -124,8 +152,9 @@ export function LoginForm() {
             size="lg"
             radius="sm"
             type="submit"
+            isLoading={isLoading}
           >
-            <span>Sign up</span>
+            <span>{isLoading ? "Loading" : "Sign in"}</span>
             <span>
               <ArrowRight width={18} />
             </span>

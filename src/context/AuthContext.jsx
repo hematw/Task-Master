@@ -29,7 +29,7 @@ function AuthProvider({ children }) {
       navigate("signin");
       console.log(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Something went wrong try again later");
     }
   };

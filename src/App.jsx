@@ -14,6 +14,7 @@ import ResetPassword from "./pages/ResetPassword";
 import SelectedProject from "./pages/SelectedProject";
 import AuthProvider from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ToastContainer } from "react-toastify";
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 // const Home = lazy(()=> import("./pages/Home"))
@@ -27,6 +28,7 @@ function App() {
   return (
     <>
       <AuthProvider>
+      <ToastContainer position="top-center" />
         <NextUIProvider navigate={navigate} useHref={useHref}>
           <GoogleOAuthProvider clientId={clientId}>
             <Routes>
