@@ -133,7 +133,6 @@ export function RegisterForm() {
                 {...field}
                 isInvalid={errors.firstName ? true : false}
                 errorMessage={errors.firstName?.message}
-                firstName
               />
             )}
           />

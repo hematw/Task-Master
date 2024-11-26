@@ -6,7 +6,7 @@ function User({ user }) {
   return (
     <div className="flex items-center gap-2">
       <Avatar size="sm" fallback={<User2 />} src={user?.profile} radius="sm" />
-      <p>{user.firstName}</p>
+      <p>{user?.firstName}</p>
     </div>
   );
 }

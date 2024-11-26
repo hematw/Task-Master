@@ -22,11 +22,11 @@ function Profile() {
   } = useForm({
     // resolver: joiResolver(registerSchema),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      country: user.country,
-      profile: user.profile,
-      dob: user.dob ?new Date(user.dob)?.toISOString().substring(0, 10) : "",
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      country: user?.country,
+      profile: user?.profile,
+      dob: user?.dob ?new Date(user.dob)?.toISOString().substring(0, 10) : "",
       currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
