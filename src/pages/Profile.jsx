@@ -80,7 +80,7 @@ function Profile() {
           <div className="flex gap-4 max-w-2xl m-auto">
             <div className="w-52 h-52 border-2 border-gray-500 rounded-xl relative  overflow-hidden">
               <img
-                src={imgPath || user.profile}
+                src={imgPath || user?.profile}
                 alt={`Profile photo of`}
                 className="w-full h-full object-cover"
               />
