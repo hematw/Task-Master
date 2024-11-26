@@ -126,13 +126,13 @@ function EditProject({
                         selectedKeys={[value]}
                         renderValue={(users) =>
                           users.map((user) => (
-                            <User user={user.data} key={user.data._id} />
+                            <User user={user.data} key={user.data?._id} />
                           ))
                         }
                       >
                         {(user) => (
                           <SelectItem
-                            key={user._id}
+                            key={user?._id}
                             textValue={user.firstName + " " + user.lastName}
                           >
                             <User user={user} />
