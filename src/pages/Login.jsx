@@ -1,7 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { ArrowRight } from "lucide-react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import axiosIns from "@/axios";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button, Input } from "@nextui-org/react";
@@ -10,6 +9,7 @@ import PassInput from "@/components/PassInput";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/context/AuthContext";
 import GoogleAuth from "@/components/GoogleAuth";
+import GitHubAuth from "@/components/GithubAuth";
 
 const loginSchema = Joi.object({
   email: Joi.string()
@@ -18,7 +18,7 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export function LoginForm() {
+function LoginForm() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -73,6 +73,7 @@ export function LoginForm() {
         <h1 className="text-3xl font-semibold text-center">TaskMaster</h1>
         <div className="mt-10">
           <GoogleAuth isLoading={isLoading} setIsLoading={setIsLoading} />
+          <GitHubAuth />
         </div>
         <div style={{ textAlign: "center", margin: "20px 0" }}>
           <hr
@@ -170,3 +171,5 @@ export function LoginForm() {
     </div>
   );
 }
+
+export default LoginForm;

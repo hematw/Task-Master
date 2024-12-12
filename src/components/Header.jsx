@@ -2,7 +2,6 @@ import { AuthContext } from "@/context/AuthContext";
 import { Avatar, Badge, Button } from "@nextui-org/react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
 import Notifications from "./Notifications";
 
 export default function Header() {

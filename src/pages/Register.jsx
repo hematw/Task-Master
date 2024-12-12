@@ -25,7 +25,7 @@ const registerSchema = Joi.object({
   dob: Joi.date().required(),
 });
 
-export function RegisterForm() {
+function RegisterForm() {
   const [serverError, setServerError] = useState();
   const [duplicateError, setDuplicateError] = useState();
   const navigate = useNavigate();
@@ -213,3 +213,5 @@ export function RegisterForm() {
     </div>
   );
 }
+
+export default RegisterForm;

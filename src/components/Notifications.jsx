@@ -9,6 +9,8 @@ import axiosIns from "@/axios";
 import { Bell } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import moment from "moment";
+
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -19,6 +21,7 @@ function Notifications() {
       try {
         const { data } = await axiosIns.get("/notifications");
         setNotifications(data.notifications);
+        console.log(data)
       } catch (error) {
         console.error(error);
       }
@@ -63,7 +66,8 @@ function Notifications() {
             }`}
             onClick={() => handleReadNotification(notification._id)}
           >
-            <div className="flex items-center gap-4 p-2 border-b last:border-none">
+            <div className="flex items-center gap-4 p-2 border-b last:border-none relative">
+              <span className="text-gray-400 text-xs absolute top-0 right-0">{moment(notification.createdAt).fromNow()}</span>
               <div className="flex-shrink-0">
                 <div
                   className={`${
